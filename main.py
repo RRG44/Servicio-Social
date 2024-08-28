@@ -7,6 +7,7 @@ ch = pd.read_excel(r'CH 2023-2.xlsx', skiprows = 4) # ! Change for user path
 
 # * DATA CLEANING PROCESS
 
+# creates LU, LU.1, etc from LUNES, etc and deletes the unused col
 dias = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES']
 for d in dias:
     siia[[d[:2] , d[:2]+'.1']] = siia[d].apply(separateHours).apply(pd.Series)
