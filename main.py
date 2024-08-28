@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 from utilities import separateHours 
 
-siiaPath = r'D:\omarg\Descargas\carga siia 232.xlsx' # ! Change for user path
-chPath = r'D:\omarg\Descargas\CH 2023-2.xlsx' # ! Change for user path
+siiaPath = r'cargasiia232.xlsx' # ! Change for user path
+chPath = r'CH2023-2.xlsx' # ! Change for user path
 
-siia = pd.read_excel(siiaPath, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR")
+siia = pd.read_excel(siiaPath, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR").astype({"MAESTRO":'float'})
 ch = pd.read_excel(chPath,skiprows = 4) #bien
 
 # * DATA CLEANING PROCESS
