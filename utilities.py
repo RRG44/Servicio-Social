@@ -1,4 +1,5 @@
 # Function to separate the hours of the string hh:mm-hh:mm
+import unicodedata
 def separateHours(hours):
     """This function transforms string hh:mm-hh:mm to float
         In: string Out: float, float"""

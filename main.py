@@ -35,4 +35,18 @@ siia['NOMBREMATE'] = siia['NOMBREMATE'].str.replace("—", "Ñ", case=False, reg
 # Modifies the 'GRUPO' column, so it matches the 'GRUPO' column from the FIF
 siia['GRUPO'] = siia['GRUPO'] % 100
 
+# * FORMATTING COLUMN NAMES PROCESS
+# Renames the columns Semestre to Bloque
+siia.rename(columns={'SEMESTRE':'BLOQUE'}, inplace=True)
+# Renames the columns Materia to CVEM
+siia.rename(columns={'MATERIA':'CVEM'}, inplace=True)
+# Renames the columns Nombremate to Materia
+siia.rename(columns={'NOMBREMATE':'MATERIA'}, inplace=True)
+# Renames the columns Area to Pe
+siia.rename(columns={'AREA':'PE'}, inplace=True)
+# Renames the columns Maestro to CVE Profesor
+siia.rename(columns={'MAESTRO':'CVE PROFESOR'}, inplace=True)
+# Renames the columns Nombre to Profesor
+siia.rename(columns={'NOMBRE':'PROFESOR'}, inplace=True)
+
 # * COMPARE PROCESS

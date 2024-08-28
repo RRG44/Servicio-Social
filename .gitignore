@@ -2,6 +2,10 @@
 # hola
 .vscode/
 .vscode
+.idea/
+.idea
+main.ipynb
+View.ipynb
 cargasiia232.xlsx
 CH2023-2.xlsx
-main.ipynb
+__pycache__/
