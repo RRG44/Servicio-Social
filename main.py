@@ -20,7 +20,7 @@ for d in dias:
     siia[[d[:2] , d[:2]+'.1']] = siia[d].apply(separateHours).apply(pd.Series)
 for d in dias:
     siia.drop(d, axis = 1)
-    
+
 # * FORMATTING TEXT PROCESS
 
 # Aply the funcion to eliminate acents and replace the dots in the columns
@@ -36,29 +36,28 @@ siia['NOMBREMATE'] = siia['NOMBREMATE'].str.replace("—", "Ñ", case=False, reg
 siia['GRUPO'] = siia['GRUPO'] % 100
 
 # * FORMATTING COLUMN NAMES PROCESS
-# Renames the columns Semestre to Bloque
-siia.rename(columns={'SEMESTRE':'BLOQUE'}, inplace=True)
-# Renames the columns Materia to CVEM
-siia.rename(columns={'MATERIA':'CVEM'}, inplace=True)
-# Renames the columns Nombremate to Materia
-siia.rename(columns={'NOMBREMATE':'MATERIA'}, inplace=True)
-# Renames the columns Area to Pe
-siia.rename(columns={'AREA':'PE'}, inplace=True)
-# Renames the columns Maestro to CVE Profesor
-siia.rename(columns={'MAESTRO':'CVE PROFESOR'}, inplace=True)
-# Renames the columns Nombre to Profesor
-siia.rename(columns={'NOMBRE':'PROFESOR'}, inplace=True)
-# Renames the columns AulaLunes to SA.1, AulaMartes to SA.2, AulaMiercoles to SA.3, AulaJueves to SA.4, AulaViernes to SA.5
-siia.rename(columns={'AULALUNES':'SA.1', 'AULAMARTES':'SA.2', 'AULAMIERCO':'SA.3', 'AULAJUEVES':'SA.4', 'AULAVIERNE':'SA.5'}, inplace=True)
+siia.rename(columns={
+    'SEMESTRE': 'BLOQUE',
+    'MATERIA': 'CVEM',
+    'NOMBREMATE': 'MATERIA',
+    'AREA': 'PE',
+    'MAESTRO': 'CVE PROFESOR',
+    'NOMBRE': 'PROFESOR',
+    'AULALUNES': 'SA',
+    'AULAMARTES': 'SA.1',
+    'AULAMIERCO': 'SA.2',
+    'AULAJUEVES': 'SA.3',
+    'AULAVIERNE': 'SA.4'
+}, inplace=True)
 
 # * ADDING AULA TO SA.1, SA.2, ETC DEPENDING ON THE DAY AND CLEARING AULA IF MOVED
 # Mapping days to their respective columns
 day_to_sa = {
-    'LU': 'SA.1',
-    'MA': 'SA.2',
-    'MI': 'SA.3',
-    'JU': 'SA.4',
-    'VI': 'SA.5'
+    'LU': 'SA',
+    'MA': 'SA.1',
+    'MI': 'SA.2',
+    'JU': 'SA.3',
+    'VI': 'SA.4'
 }
 
 # Adding aula to SA.1, SA.2, etc. depending on the day and clearing AULA if moved
@@ -69,11 +68,11 @@ for day, sa in day_to_sa.items():
 
 # Merge rows with the same CVEM, GRUPO, BLOQUE, MATERIA, PE, CVE PROFESOR, PROFESOR and concatenate the SA.1, SA.2, SA.3, SA.4, SA.5 columns and lu, lu.1, etc
 siia = siia.groupby(['CVEM', 'GRUPO', 'BLOQUE', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR'], as_index=False).agg({
+    'SA': lambda x: ', '.join(x.dropna().astype(str)),
     'SA.1': lambda x: ', '.join(x.dropna().astype(str)),
     'SA.2': lambda x: ', '.join(x.dropna().astype(str)),
     'SA.3': lambda x: ', '.join(x.dropna().astype(str)),
     'SA.4': lambda x: ', '.join(x.dropna().astype(str)),
-    'SA.5': lambda x: ', '.join(x.dropna().astype(str)),
     'LU': lambda x: ', '.join(x.dropna().astype(str)),
     'LU.1': lambda x: ', '.join(x.dropna().astype(str)),
     'MA': lambda x: ', '.join(x.dropna().astype(str)),
@@ -85,5 +84,6 @@ siia = siia.groupby(['CVEM', 'GRUPO', 'BLOQUE', 'MATERIA', 'PE', 'CVE PROFESOR',
     'VI': lambda x: ', '.join(x.dropna().astype(str)),
     'VI.1': lambda x: ', '.join(x.dropna().astype(str))
 })
-
+# Organize the columns of frame siia in the order of the CH
+siia = siia[[ 'GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR', 'LU','LU.1','SA','MA','MA.1','SA.1','MI','MI.1','SA.2','JU','JU.1','SA.3','VI','VI.1','SA.4']]
 # * COMPARE PROCESS
