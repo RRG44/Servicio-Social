@@ -66,5 +66,24 @@ for day, sa in day_to_sa.items():
     condition = siia[day].notnull() | siia[f'{day}.1'].notnull()
     siia[sa] = np.where(condition, siia['AULA'], siia[sa])
     siia['AULA'] = np.where(condition, np.nan, siia['AULA'])
-    
+
+# Merge rows with the same CVEM, GRUPO, BLOQUE, MATERIA, PE, CVE PROFESOR, PROFESOR and concatenate the SA.1, SA.2, SA.3, SA.4, SA.5 columns and lu, lu.1, etc
+siia = siia.groupby(['CVEM', 'GRUPO', 'BLOQUE', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR'], as_index=False).agg({
+    'SA.1': lambda x: ', '.join(x.dropna().astype(str)),
+    'SA.2': lambda x: ', '.join(x.dropna().astype(str)),
+    'SA.3': lambda x: ', '.join(x.dropna().astype(str)),
+    'SA.4': lambda x: ', '.join(x.dropna().astype(str)),
+    'SA.5': lambda x: ', '.join(x.dropna().astype(str)),
+    'LU': lambda x: ', '.join(x.dropna().astype(str)),
+    'LU.1': lambda x: ', '.join(x.dropna().astype(str)),
+    'MA': lambda x: ', '.join(x.dropna().astype(str)),
+    'MA.1': lambda x: ', '.join(x.dropna().astype(str)),
+    'MI': lambda x: ', '.join(x.dropna().astype(str)),
+    'MI.1': lambda x: ', '.join(x.dropna().astype(str)),
+    'JU': lambda x: ', '.join(x.dropna().astype(str)),
+    'JU.1': lambda x: ', '.join(x.dropna().astype(str)),
+    'VI': lambda x: ', '.join(x.dropna().astype(str)),
+    'VI.1': lambda x: ', '.join(x.dropna().astype(str))
+})
+
 # * COMPARE PROCESS
