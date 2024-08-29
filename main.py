@@ -48,6 +48,8 @@ siia.rename(columns={'AREA':'PE'}, inplace=True)
 siia.rename(columns={'MAESTRO':'CVE PROFESOR'}, inplace=True)
 # Renames the columns Nombre to Profesor
 siia.rename(columns={'NOMBRE':'PROFESOR'}, inplace=True)
+# Renames the columns AulaLunes to SA.1, AulaMartes to SA.2, AulaMiercoles to SA.3, AulaJueves to SA.4, AulaViernes to SA.5
+siia.rename(columns={'AULALUNES':'SA.1', 'AULAMARTES':'SA.2', 'AULAMIERCO':'SA.3', 'AULAJUEVES':'SA.4', 'AULAVIERNE':'SA.5'}, inplace=True)
 
 # * ADDING AULA TO SA.1, SA.2, ETC DEPENDING ON THE DAY AND CLEARING AULA IF MOVED
 # Mapping days to their respective columns
