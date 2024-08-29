@@ -49,4 +49,20 @@ siia.rename(columns={'MAESTRO':'CVE PROFESOR'}, inplace=True)
 # Renames the columns Nombre to Profesor
 siia.rename(columns={'NOMBRE':'PROFESOR'}, inplace=True)
 
+# * ADDING AULA TO SA.1, SA.2, ETC DEPENDING ON THE DAY AND CLEARING AULA IF MOVED
+# Mapping days to their respective columns
+day_to_sa = {
+    'LU': 'SA.1',
+    'MA': 'SA.2',
+    'MI': 'SA.3',
+    'JU': 'SA.4',
+    'VI': 'SA.5'
+}
+
+# Adding aula to SA.1, SA.2, etc. depending on the day and clearing AULA if moved
+for day, sa in day_to_sa.items():
+    condition = siia[day].notnull() | siia[f'{day}.1'].notnull()
+    siia[sa] = np.where(condition, siia['AULA'], siia[sa])
+    siia['AULA'] = np.where(condition, np.nan, siia['AULA'])
+    
 # * COMPARE PROCESS
