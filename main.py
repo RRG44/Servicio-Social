@@ -5,5 +5,5 @@ import utilities as util
 siiaPath = r'cargasiia232.xlsx' # ! Change for user path
 chPath = r'CH2023-2.xlsx' # ! Change for user path
 
-siia = util.readSiia(siiaPath)
-ch = util.readCH(chPath)
+siia = util.read_siia(siiaPath)
+ch = util.read_ch(chPath)
