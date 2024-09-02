@@ -67,9 +67,23 @@ def read_siia(path):
 
 def read_ch(path):
     """Import and process CH Excel data."""
-    # TODO: try catch format OBED
-    ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
-    return ch.convert_dtypes()
+    required_columns = ['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
+                        'LU', 'LU.1', 'SA', 'MA', 'MA.1', 'SA.1', 'MI', 'MI.1', 'SA.2', 'JU',
+                        'JU.1', 'SA.3', 'VI', 'VI.1', 'SA.4']
+    try:
+        ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
+        ch = ch.convert_dtypes()
+
+        # Check if all required columns are present
+        missing_columns = [col for col in required_columns if col not in ch.columns]
+        if missing_columns:
+            raise KeyError(f"Columnas faltantes: {', '.join(missing_columns)}")
+
+        return ch
+    except KeyError as e:
+        print(f"Error: El formato del archivo Excel es inválido. {e}")
+    except Exception as e:
+        print(f"Error: No se pudo procesar el archivo Excel. Detalles: {e}")
 
 def change_col_order(df):
     df = df[['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
