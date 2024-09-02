@@ -70,3 +70,9 @@ def read_ch(path):
     # TODO: try catch format OBED
     ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
     return ch.convert_dtypes()
+
+def change_col_order(df):
+    df = df[['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
+        'LU', 'LU.1', 'SA', 'MA', 'MA.1', 'SA.1', 'MI', 'MI.1', 'SA.2', 'JU',
+        'JU.1', 'SA.3', 'VI', 'VI.1', 'SA.4']]
+    return df
