@@ -28,7 +28,9 @@ def remove_accents(input_str):
 def readSiia(path):
     """Importing the siia EXCEL file with the columns that we only need (Check the Google DOCS), and with MAESTRO column as float"""
     
+    # TODO: try catch format NOE
     siia =  pd.read_excel(path, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR").astype({"MAESTRO":'float'})
+    
     # Renames the columns Semestre to Bloque
     siia.rename(columns={'SEMESTRE':'BLOQUE'}, inplace=True)
     # Renames the columns Materia to CVEM
@@ -108,6 +110,7 @@ def readSiia(path):
 
 def readCH(path):
     """Importing the CH EXCEL, skiping the image on it"""
+    # TODO: try catch format OBED
     ch = pd.read_excel(path,skiprows = 4)
     ch.drop(labels=['No'], axis=1, inplace=True)
     correct = ch.convert_dtypes() # ! this changes all to target datatype and None, NaN to <NA>
