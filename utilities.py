@@ -26,7 +26,7 @@ def read_siia(path):
     
     # siia = pd.read_excel(path, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR").rename(columns=columns_mapping) 
     siia = pd.read_excel(path, usecols="AREA,MATERIA,SEMESTRE,GRUPO,MAESTRO,NOMBRE,NOMBREMATE,LUNES,MARTES,MIERCOLES,JUEVES,VIERNES,EDIFICIO,AULALUNES,AULAMARTES,AULAMIERCO,AULAJUEVES,AULAVIERNE").rename(columns=columns_mapping)
-    siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype(float)
+    siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')
     # Apply accent and punctuation removal
     siia['PROFESOR'] = siia['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
     siia['MATERIA'] = siia['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
