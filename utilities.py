@@ -23,7 +23,42 @@ def read_siia(path):
     }
 
     # TODO: try catch format NOE
+
     
+    def validar_excel(file_path):
+        expected_columns = [
+            'PERIODO', 'ADSCRIP', 'AREA', 'MATERIA', 'SEMESTRE', 'GRUPO',
+            'LABORATORI', 'MAESTRO', 'HORAS', 'TIPOHOR', 'NOMBRE', 'CVECARPRED',
+            'PUESTO', 'NOMBREMATE', 'FORMPAG', 'FECINIP', 'TIPOHORA', 'LUNES',
+            'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'CARRERA',
+            'EDIFICIO', 'AULA', 'ADSCRIPCIO', 'CUPO', 'SUPLENTE', 'MOTIVO',
+            'FECHASSUPL', 'FECHCAPTUR', 'CAPTURO', 'CARGA', 'EDIFLUNES',
+            'AULALUNES', 'EDIFMARTES', 'AULAMARTES', 'EDIFMIERCO', 'AULAMIERCO',
+            'EDIFJUEVES', 'AULAJUEVES', 'EDIFVIERNE', 'AULAVIERNE', 'EDIFSABADO',
+            'AULASABADO'
+        ]
+        
+        try:
+            # Cargar el archivo Excel
+            data = pd.read_excel(r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx')
+
+            # Verificar que todas las columnas esperadas estén presentes
+            missing_columns = [col for col in expected_columns if col not in data.columns]
+            if missing_columns:
+                raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
+            
+            # Aquí podrías agregar más validaciones, como los tipos de datos
+
+            print("El archivo es válido y cumple con el formato esperado.")
+            
+        except Exception as e:
+            print(f"Error al validar el archivo: {str(e)}")
+
+    # Validando
+    file_path = r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx'
+    validar_excel(file_path)
+
+
 
     siia = pd.read_excel(path, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR").rename(columns=columns_mapping)
     siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')  # Use Int64 to allow for integer operations
