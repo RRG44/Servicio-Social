@@ -126,3 +126,29 @@ def convert_types(df):
         df[column] = df[column].astype('string[python]')
     
     return df
+
+def highlight(row):
+    styles = []
+    for col in row.index:
+        if '_ch' in col:
+            col_base = col.replace('_ch', '')
+            val_ch = row[col]
+            val_siia = row.get(f'{col_base}_siia')
+            
+            if pd.isna(val_siia) and pd.isna(val_ch):
+                styles.append('')  # No highlight, both are NaN
+            elif (pd.isna(val_siia) and not pd.isna(val_ch)) or (not pd.isna(val_siia) and pd.isna(val_ch)):
+                styles.append('background-color: red')  # Highlight if one is NaN and the other is not
+            elif val_siia != val_ch:
+                styles.append('background-color: red')  # Highlight if different
+            else:
+                styles.append('')  # No highlight if they are the same
+        else:
+            styles.append('')
+    return styles
+
+def highlight_differences(siia, ch):
+    # Merge df on the key columns
+    comparison = ch.merge(siia, on=['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR'], suffixes=('_ch', '_siia'))
+    df = comparison.style.apply(highlight, axis=1)
+    return df
