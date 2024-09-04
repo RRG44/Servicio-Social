@@ -54,7 +54,7 @@ def read_siia(path):
         except Exception as e:
             print(f"Error al validar el archivo: {str(e)}")
 
-    # Validando
+    # Validar archivo
     file_path = r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx'
     validar_excel(file_path)
 
