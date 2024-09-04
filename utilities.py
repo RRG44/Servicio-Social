@@ -46,8 +46,6 @@ def read_siia(path):
             missing_columns = [col for col in expected_columns if col not in data.columns]
             if missing_columns:
                 raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
-            
-            # Aquí podrías agregar más validaciones, como los tipos de datos
 
             print("El archivo es válido y cumple con el formato esperado.")
             
