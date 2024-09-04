@@ -24,7 +24,6 @@ def read_siia(path):
 
     # TODO: try catch format NOE
     
-    # siia = pd.read_excel(path, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR").rename(columns=columns_mapping) 
     siia = pd.read_excel(path, usecols="AREA,MATERIA,SEMESTRE,GRUPO,MAESTRO,NOMBRE,NOMBREMATE,LUNES,MARTES,MIERCOLES,JUEVES,VIERNES,EDIFICIO,AULALUNES,AULAMARTES,AULAMIERCO,AULAJUEVES,AULAVIERNE").rename(columns=columns_mapping)
     siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')
     # Apply accent and punctuation removal
