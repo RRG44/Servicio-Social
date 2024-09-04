@@ -23,10 +23,7 @@ def read_siia(path):
     }
 
     # TODO: try catch format NOE
-<<<<<<< HEAD
     
-=======
->>>>>>> dceb89fca25524fc91a43361741d71470ea17b05
 
     siia = pd.read_excel(path, usecols="C:F,H,K,N,R:V,Z,AJ,AL,AN,AP,AR").rename(columns=columns_mapping)
     siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')  # Use Int64 to allow for integer operations
