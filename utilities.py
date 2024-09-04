@@ -39,22 +39,20 @@ def read_siia(path):
         ]
         
         try:
-            # Cargar el archivo Excel
+            #Cargar el archivo Excel
             data = pd.read_excel(r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx')
 
-            # Verificar que todas las columnas esperadas estén presentes
+            #Verificar que todas las columnas esperadas esten presentes
             missing_columns = [col for col in expected_columns if col not in data.columns]
             if missing_columns:
                 raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
             
-            # Aquí podrías agregar más validaciones, como los tipos de datos
-
             print("El archivo es válido y cumple con el formato esperado.")
             
         except Exception as e:
             print(f"Error al validar el archivo: {str(e)}")
 
-    # Validar archivo
+    #Validar archivo
     file_path = r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx'
     validar_excel(file_path)
 
