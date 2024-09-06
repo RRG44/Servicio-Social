@@ -11,4 +11,21 @@ ch = util.read_ch(chPath)
 
 # highlighting
 dfp = util.highlight_differences(siia, ch)
-dfp.to_excel('comparison_output.xlsx', engine='openpyxl', index=False)
+
+dfp.set_properties(**{
+        'border': '1px solid black',
+        'text-align': 'center'
+    })
+
+writer = pd.ExcelWriter('data.xlsx', engine='xlsxwriter')
+
+dfp.to_excel(writer, sheet_name='Sheet1', index=False)
+
+workbook = writer.book
+worksheet = writer.sheets['Sheet1']
+
+for i, col in enumerate(dfp.data.columns):
+    max_len = max(dfp.data[col].apply(lambda x: len(str(x))).max(), len(col))
+    worksheet.set_column(i, i, max_len + 1)
+
+writer.close()    
