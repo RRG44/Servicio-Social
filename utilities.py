@@ -151,3 +151,6 @@ def highlight_differences(siia, ch):
     comparison = ch.merge(siia, on=['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR'], suffixes=('_ch', '_siia'))
     df = comparison.style.apply(highlight, axis=1)
     return df
+
+def insert_na(data):
+    return data.replace(to_replace=[0, ''], value=pd.NA)
