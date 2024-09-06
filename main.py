@@ -2,22 +2,24 @@ import pandas as pd
 import numpy as np
 import utilities as util
 
-siiaPath = r'cargasiia232.xlsx' # ! Change for user path
-chPath = r'CH2023-2.xlsx' # ! Change for user path
+siiaPath = r'C:\Users\gr_mi\Desktop\AaToSave\Ing en Software\7to semestre\Servicio Social\Proyecto\Archivos Excel\carga siia 232.xlsx' # ! Change for user path
+chPath = r'C:\Users\gr_mi\Desktop\AaToSave\Ing en Software\7to semestre\Servicio Social\Proyecto\Archivos Excel\CH 2023-2.xlsx' # ! Change for user path
 
 # file reading
 siia = util.read_siia(siiaPath)
 ch = util.read_ch(chPath)
+siia = util.change_col_order(siia)
 
 # highlighting
 dfp = util.highlight_differences(siia, ch)
+dfp.data = util.insert_na(dfp.data)
 
 dfp.set_properties(**{
         'border': '1px solid black',
         'text-align': 'center'
     })
 
-writer = pd.ExcelWriter('data.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter('Comparasion.xlsx', engine='xlsxwriter')
 
 dfp.to_excel(writer, sheet_name='Sheet1', index=False)
 
