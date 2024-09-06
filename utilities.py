@@ -148,7 +148,7 @@ def highlight(row):
 
 def highlight_differences(siia, ch):
     # Merge df on the key columns
-    comparison = ch.merge(siia, on=['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR'], suffixes=('_ch', '_siia'))
+    comparison = ch.merge(siia, on=['GRUPO', 'BLOQUE', 'CVEM', 'PE'], suffixes=('_ch', '_siia'), how='outer')
     df = comparison.style.apply(highlight, axis=1)
     return df
 
