@@ -127,9 +127,15 @@ def convert_types(df):
     return df
 
 def highlight(row):
-    styles = []
+    theres_blank, styles = blank_row(row)
+    
+    if theres_blank:
+        return styles
+    
     for col in row.index:
-        if '_ch' in col:
+        condition = ('PROFESOR_' in col) or ('MATERIA_' in col)
+
+        if not condition and ('_ch' in col):
             col_base = col.replace('_ch', '')
             val_ch = row[col]
             val_siia = row.get(f'{col_base}_siia')
@@ -154,3 +160,20 @@ def highlight_differences(siia, ch):
 
 def insert_na(data):
     return data.replace(to_replace=[0, ''], value=pd.NA)
+
+def blank_row(row):
+    styles = []
+    blank_siia = True if (pd.isna(row.get('CVE PROFESOR_siia')) or row.get('CVE PROFESOR_siia')==0) and (pd.isna(row.get('MATERIA_siia')) or row.get('MATERIA_siia')=='') else False
+    blank_ch = True if (pd.isna(row.get('CVE PROFESOR_ch')) or row.get('CVE PROFESOR_ch')==0) and (pd.isna(row.get('MATERIA_ch')) or row.get('MATERIA_ch')=='') else False
+    there_are = True if blank_siia or blank_ch else False
+    
+    if not there_are:
+        return there_are, styles
+
+    for _ in row.index:
+        if blank_siia:
+            styles.append('background-color: orange')
+        if blank_ch:
+            styles.append('background-color: yellow')
+
+    return there_are, styles
