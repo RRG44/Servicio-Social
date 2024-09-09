@@ -8,4 +8,6 @@ main.ipynb
 View.ipynb
 cargasiia232.xlsx
 CH2023-2.xlsx
+*.ipynb
+*.xlsx
 __pycache__/
