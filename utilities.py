@@ -178,3 +178,36 @@ def blank_row(row):
             styles.append('background-color: yellow')
 
     return there_are, styles
+
+
+#Verify that the excel that is entered follows the desired format
+
+def validar_excel(file_path):
+    expected_columns = [
+        'PERIODO', 'ADSCRIP', 'AREA', 'MATERIA', 'SEMESTRE', 'GRUPO',
+        'LABORATORI', 'MAESTRO', 'HORAS', 'TIPOHOR', 'NOMBRE', 'CVECARPRED',
+        'PUESTO', 'NOMBREMATE', 'FORMPAG', 'FECINIP', 'TIPOHORA', 'LUNES',
+        'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'CARRERA',
+        'EDIFICIO', 'AULA', 'ADSCRIPCIO', 'CUPO', 'SUPLENTE', 'MOTIVO',
+        'FECHASSUPL', 'FECHCAPTUR', 'CAPTURO', 'CARGA', 'EDIFLUNES',
+        'AULALUNES', 'EDIFMARTES', 'AULAMARTES', 'EDIFMIERCO', 'AULAMIERCO',
+        'EDIFJUEVES', 'AULAJUEVES', 'EDIFVIERNE', 'AULAVIERNE', 'EDIFSABADO',
+        'AULASABADO'
+    ]
+    
+    try:
+        # Load the Excel
+        data = pd.read_excel(file_path)
+        
+        # Verify that all expected columns are present
+        missing_columns = [col for col in expected_columns if col not in data.columns]
+        if missing_columns:
+            raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
+        print("El archivo es válido y cumple con el formato esperado.")
+        
+    except Exception as e:
+        print(f"Error al validar el archivo: {str(e)}")
+
+#Use
+file_path = r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx'
+validar_excel(file_path)

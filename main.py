@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import utilities as util
 
-siiaPath = r'carga siia 232.xlsx' # ! Change for user path
-chPath = r'CH 2023-2.xlsx' # ! Change for user path
+siiaPath = r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx' # ! Change for user path
+chPath = r'C:\Users\casti\OneDrive\Documentos\SS\CH 2023-2.xlsx' # ! Change for user path
 
 # file reading
 siia = util.read_siia(siiaPath)
