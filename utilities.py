@@ -135,9 +135,10 @@ def highlight(row):
     for col in row.index:
         condition = ('PROFESOR_' in col) or ('MATERIA_' in col)
 
-        if not condition and ('_ch' in col):
-            col_base = col.replace('_ch', '')
-            val_ch = row[col]
+        # if not condition and ('_ch' in col):
+        if not condition and (('_ch' in col) or ('_siia' in col)):
+            col_base = col.replace('_ch', '') if '_ch' in col else col.replace('_siia', '')
+            val_ch = row.get(f'{col_base}_ch')
             val_siia = row.get(f'{col_base}_siia')
             
             if pd.isna(val_siia) and pd.isna(val_ch):
