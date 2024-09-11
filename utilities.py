@@ -1,5 +1,6 @@
 import pandas as pd
 import unicodedata
+import sys
 
 def separate_hours(hours):
     """Transform string hh:mm-hh:mm to float."""
@@ -17,13 +18,9 @@ def remove_accents(input_str):
 
 def read_siia(path):
     """Import and process SIIA Excel data."""
-    columns_mapping = {
-        'SEMESTRE': 'BLOQUE', 'MATERIA': 'CVEM', 'NOMBREMATE': 'MATERIA',
-        'AREA': 'PE', 'MAESTRO': 'CVE PROFESOR', 'NOMBRE': 'PROFESOR'
-    }
+    
+    siia = validate_siia(path)
 
-    # TODO: try catch format NOE
-    siia = pd.read_excel(path, usecols=["AREA","MATERIA","SEMESTRE","GRUPO","MAESTRO","NOMBRE","NOMBREMATE","LUNES","MARTES","MIERCOLES","JUEVES","VIERNES","AULALUNES","AULAMARTES","AULAMIERCO","AULAJUEVES","AULAVIERNE", "AULA"]).rename(columns=columns_mapping)
     siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')
     # Apply accent and punctuation removal
     siia['PROFESOR'] = siia['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
@@ -178,9 +175,14 @@ def blank_row(row):
             styles.append('background-color: yellow')
 
     return there_are, styles
-  
+
 #Verify that the excel that is entered follows the desired format
-def validar_excel(file_path):
+def validate_siia(file_path):
+    columns_mapping = {
+        'SEMESTRE': 'BLOQUE', 'MATERIA': 'CVEM', 'NOMBREMATE': 'MATERIA',
+        'AREA': 'PE', 'MAESTRO': 'CVE PROFESOR', 'NOMBRE': 'PROFESOR'
+    }
+
     expected_columns = [
         'PERIODO', 'ADSCRIP', 'AREA', 'MATERIA', 'SEMESTRE', 'GRUPO',
         'LABORATORI', 'MAESTRO', 'HORAS', 'TIPOHOR', 'NOMBRE', 'CVECARPRED',
@@ -201,7 +203,18 @@ def validar_excel(file_path):
         missing_columns = [col for col in expected_columns if col not in data.columns]
         if missing_columns:
             raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
-        return data
+        
+        # Required columns
+        required_columns = [
+            "AREA", "MATERIA", "SEMESTRE", "GRUPO", "MAESTRO", "NOMBRE", 
+            "NOMBREMATE", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", 
+            "AULALUNES", "AULAMARTES", "AULAMIERCO", "AULAJUEVES", "AULAVIERNE", "AULA"
+        ]
+        
+        # Keep only the required columns and rename them
+        siia = data[required_columns].rename(columns=columns_mapping)
+
+        return siia
         
     except Exception as e:
-        print(f"Error al validar el archivo: {str(e)}")
+        print(f"Error al validar el archivo: {str(e)}", file=sys.stderr)
