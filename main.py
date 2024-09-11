@@ -14,6 +14,7 @@ def main():
         siia = util.read_siia(siiaPath)
         ch = util.read_ch(chPath)
         siia = util.change_col_order(siia)
+        siia.insert(0, "div", "")
 
         # highlighting
         dfp = util.highlight_differences(siia, ch)
@@ -30,6 +31,11 @@ def main():
 
         workbook = writer.book
         worksheet = writer.sheets['Sheet1']
+
+        format_black = workbook.add_format({'bg_color': '#000000'})
+
+        for row in range(1, len(dfp.data) + 1):  # Comienza en la fila 1
+            worksheet.write_blank(row, dfp.data.columns.get_loc('div'), None, format_black)  # Columna 1 
 
         for i, col in enumerate(dfp.data.columns):
             max_len = max(dfp.data[col].apply(lambda x: len(str(x))).max(), len(col))
