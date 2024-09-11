@@ -10,8 +10,8 @@ def separate_hours(hours):
         start, end = hours.split("-")
         start, end = start.lstrip("0").replace(":00", ""), end.lstrip("0").replace(":00", "")
         return int(start), int(end) # TODO add try catch here 
-    except ValueError:
-        print("Error: Invalid time format. Expected 'hh:mm-hh:mm', got '{}'".format(hours))
+    except ValueError as e:
+        print(f"Error: Invalid time format. Expected 'hh:mm-hh:mm', got '{hours}'")
 
 def remove_accents(input_str):
     """Remove accents and punctuation from a string."""
