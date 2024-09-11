@@ -178,10 +178,8 @@ def blank_row(row):
             styles.append('background-color: yellow')
 
     return there_are, styles
-
-
+  
 #Verify that the excel that is entered follows the desired format
-
 def validar_excel(file_path):
     expected_columns = [
         'PERIODO', 'ADSCRIP', 'AREA', 'MATERIA', 'SEMESTRE', 'GRUPO',
@@ -203,11 +201,7 @@ def validar_excel(file_path):
         missing_columns = [col for col in expected_columns if col not in data.columns]
         if missing_columns:
             raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
-        print("El archivo es válido y cumple con el formato esperado.")
+        return data
         
     except Exception as e:
         print(f"Error al validar el archivo: {str(e)}")
-
-#Use
-file_path = r'C:\Users\casti\OneDrive\Documentos\SS\carga siia 232.xlsx'
-validar_excel(file_path)
