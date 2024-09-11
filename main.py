@@ -28,7 +28,6 @@ def main():
 
         dfp.to_excel(writer, sheet_name='Sheet1', index=False)
 
-        workbook = writer.book
         worksheet = writer.sheets['Sheet1']
 
         for i, col in enumerate(dfp.data.columns):
