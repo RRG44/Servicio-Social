@@ -36,11 +36,10 @@ def main():
 
         writer.close()    
 
-        # sys.exit(0)
-        print("DONE")
-    except KeyError as e:
-        # sys.exit(1)
-        print(f"Error: ${e}")
+        sys.exit(0)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__=="__main__":
     main()

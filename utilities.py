@@ -87,9 +87,9 @@ def read_ch(path):
         ch['MATERIA'] = ch['MATERIA'].str.replace("—", "Ñ", case=False, regex=True)
         return convert_types(ch)
     except KeyError as e:
-        print(f"Error: El formato del archivo Excel es inválido. {e}")
+        print(f"Error: El formato del archivo Excel es inválido. {e}", file=sys.stderr)
     except Exception as e:
-        print(f"Error: No se pudo procesar el archivo Excel. Detalles: {e}")
+        print(f"Error: No se pudo procesar el archivo Excel. {e}", file=sys.stderr)
     
 def change_col_order(df):
     df = df[['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
@@ -205,7 +205,7 @@ def validate_siia(file_path):
         # Verify that all expected columns are present
         missing_columns = [col for col in expected_columns if col not in data.columns]
         if missing_columns:
-            raise ValueError(f"Las siguientes columnas faltan en el archivo: {', '.join(missing_columns)}")
+            raise KeyError(f"Columnas faltantes: {', '.join(missing_columns)}")
         
         # Required columns
         required_columns = [
@@ -218,6 +218,7 @@ def validate_siia(file_path):
         siia = data[required_columns].rename(columns=columns_mapping)
 
         return siia
-        
+    except KeyError as e:
+        print(f"Error: El formato del archivo Excel es inválido. {e}", file=sys.stderr)
     except Exception as e:
-        print(f"Error al validar el archivo: {str(e)}", file=sys.stderr)
+        print(f"Error: No se pudo procesar el archivo Excel. {e}", file=sys.stderr)
