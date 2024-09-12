@@ -128,29 +128,36 @@ def convert_types(df):
 
 def highlight(row):
     theres_blank, styles = blank_row(row)
-    
+
     if theres_blank:
         return styles
-    
-    for col in row.index:
-        condition = ('PROFESOR_' in col) or ('MATERIA_' in col)
 
-        # if not condition and ('_ch' in col):
-        if not condition and (('_ch' in col) or ('_siia' in col)):
+    # Initialize styles list with empty strings for each column
+    styles = [''] * len(row.index)
+
+    for col in row.index:
+
+        if (('_ch' in col) or ('_siia' in col)):
             col_base = col.replace('_ch', '') if '_ch' in col else col.replace('_siia', '')
             val_ch = row.get(f'{col_base}_ch')
             val_siia = row.get(f'{col_base}_siia')
-            
+
             if pd.isna(val_siia) and pd.isna(val_ch):
-                styles.append('')  # No highlight, both are NaN
+                styles[row.index.get_loc(col)] = ''  # No highlight, both are NaN
             elif (pd.isna(val_siia) and not pd.isna(val_ch)) or (not pd.isna(val_siia) and pd.isna(val_ch)):
-                styles.append('background-color: red')  # Highlight if one is NaN and the other is not
+                styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if one is NaN and the other is not
             elif val_siia != val_ch:
-                styles.append('background-color: red')  # Highlight if different
+                styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if different
             else:
-                styles.append('')  # No highlight if they are the same
+                styles[row.index.get_loc(col)] = ''  # No highlight if they are the same
         else:
-            styles.append('')
+            styles[row.index.get_loc(col)] = ''
+
+    # Highlight purple if SA, SA.1, SA.2, SA.3, SA.4 contains at least "VIR"
+    for sa_col in ['SA_siia', 'SA.1_siia', 'SA.2_siia', 'SA.3_siia', 'SA.4_siia' ]:
+        if 'VIR' in str(row.get(sa_col, '')):
+            styles[row.index.get_loc(sa_col)] = 'background-color: #C790F1'
+
     return styles
 
 def highlight_differences(siia, ch):
