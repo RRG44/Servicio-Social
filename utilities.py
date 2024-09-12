@@ -133,9 +133,8 @@ def highlight(row):
     styles = [''] * len(row.index)
 
     for col in row.index:
-        condition = ('PROFESOR_' in col) or ('MATERIA_' in col)
 
-        if not condition and (('_ch' in col) or ('_siia' in col)):
+        if (('_ch' in col) or ('_siia' in col)):
             col_base = col.replace('_ch', '') if '_ch' in col else col.replace('_siia', '')
             val_ch = row.get(f'{col_base}_ch')
             val_siia = row.get(f'{col_base}_siia')
