@@ -10,7 +10,7 @@ def main():
     try:
         siiaPath = sys.argv[1]
         chPath = sys.argv[2]
-        userPath = sys.argv[3]
+        userPath = sys.argv[3] if len(sys.argv) == 4 else "" 
 
         # file reading
         siia = util.read_siia(siiaPath)
