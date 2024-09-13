@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import utilities as util
 import sys
 import os
