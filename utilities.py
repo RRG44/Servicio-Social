@@ -30,8 +30,8 @@ def read_siia(path):
     siia['MATERIA'] = siia['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
 
     # Replace special characters
-    siia['PROFESOR'] = siia['PROFESOR'].str.replace(r'—', 'N', regex=True)
-    siia['MATERIA'] = siia['MATERIA'].str.replace("—", "N", case=False, regex=True)
+    siia['PROFESOR'] = siia['PROFESOR'].str.replace('Ð', 'N', regex=True)
+    siia['MATERIA'] = siia['MATERIA'].str.replace('Ð', 'N', case=False, regex=True)
     
     # Adjust GRUPO column
     siia['GRUPO'] = siia['GRUPO'] % 100
@@ -83,8 +83,8 @@ def read_ch(path):
         ch['MATERIA'] = ch['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
 
         # Replace special characters
-        ch['PROFESOR'] = ch['PROFESOR'].str.replace(r'—', 'Ñ', regex=True)
-        ch['MATERIA'] = ch['MATERIA'].str.replace("—", "Ñ", case=False, regex=True)
+        ch['PROFESOR'] = ch['PROFESOR'].str.replace(r'—', 'N', regex=True)
+        ch['MATERIA'] = ch['MATERIA'].str.replace("—", "N", case=False, regex=True)
         return convert_types(ch)
     except KeyError as e:
         print(f"Error: El formato del archivo Excel es inválido. {e}", file=sys.stderr)
