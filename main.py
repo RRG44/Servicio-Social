@@ -30,8 +30,9 @@ def main():
         path = os.path.join(userPath, "comparison.xlsx")
         writer = pd.ExcelWriter(path, engine='xlsxwriter')
 
-        dfp.to_excel(writer, sheet_name='Sheet1', index=False)
-        workbook = writer.book
+        aliases = ['GRUPO','BLOQUE','CVEM','MATERIA CH','PE','CVE PROFESOR CH','PROFESOR CH','LU CH','LU CH','SA CH', 'MA CH', 'MA CH', 'SA CH','MI CH','MI CH','SA CH','JU CH','JU CH','SA CH','VI CH','VI CH','SA CH','','MATERIA SIIA','CVE PROFESOR SIIA','PROFESOR SIIA','LU SIIA','LU SIIA','SA SIIA','MA SIIA','MA SIIA','SA SIIA','MI SIIA','MI SIIA','SA SIIA','JU SIIA','JU SIIA','SA SIIA','VI SIIA','VI SIIA','SA SIIA']
+        dfp.to_excel(writer, sheet_name='Sheet1', index=False, header=aliases)
+
         worksheet = writer.sheets['Sheet1']
 
         for i, col in enumerate(dfp.data.columns):
