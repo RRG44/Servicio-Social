@@ -4,11 +4,14 @@ import sys
 
 def separate_hours(hours):
     """Transform string hh:mm-hh:mm to float."""
-    if hours == '-':
-        return 0, 0  # Use 0.0 for numeric operations
-    start, end = hours.split("-")
-    start, end = start.lstrip("0").replace(":00", ""), end.lstrip("0").replace(":00", "")
-    return int(start), int(end)
+    try: 
+        if hours == '-':
+            return 0, 0  # Use 0.0 for numeric operations
+        start, end = hours.split("-")
+        start, end = start.lstrip("0").replace(":00", ""), end.lstrip("0").replace(":00", "")
+        return int(start), int(end) # TODO add try catch here 
+    except ValueError as e:
+        print(f"Error: Formato invalido. Se espera 'hh:mm-hh:mm', se tiene '{hours}'")
 
 def remove_accents(input_str):
     """Remove accents and punctuation from a string."""

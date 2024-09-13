@@ -2,13 +2,15 @@ import pandas as pd
 import numpy as np
 import utilities as util
 import sys
+import os
 
-#! COMMAND: python main.py "carga siia 232.xlsx" "CH 2023-2.xlsx"
+#! COMMAND: python main.py "carga siia 232.xlsx" "CH 2023-2.xlsx" "userPath FOLDER here"
 
 def main():
     try:
         siiaPath = sys.argv[1]
         chPath = sys.argv[2]
+        userPath = sys.argv[3]
 
         # file reading
         siia = util.read_siia(siiaPath)
@@ -25,10 +27,10 @@ def main():
                 'text-align': 'center'
             })
 
-        writer = pd.ExcelWriter('comparasion.xlsx', engine='xlsxwriter')
+        path = os.path.join(userPath, "comparison.xlsx")
+        writer = pd.ExcelWriter(path, engine='xlsxwriter')
 
         dfp.to_excel(writer, sheet_name='Sheet1', index=False)
-
         workbook = writer.book
         worksheet = writer.sheets['Sheet1']
 
