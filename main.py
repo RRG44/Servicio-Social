@@ -36,8 +36,8 @@ def main():
 
         format_black = workbook.add_format({'bg_color': '#000000'})
 
-        for row in range(1, len(dfp.data) + 1):  # Comienza en la fila 1
-            worksheet.write_blank(row, dfp.data.columns.get_loc('div'), None, format_black)  # Columna 1 
+        # for row in range(1, len(dfp.data) + 1):  # Comienza en la fila 1
+        #     worksheet.write_blank(row, dfp.data.columns.get_loc('div'), None, format_black)  # Columna 1 
 
         for i, col in enumerate(dfp.data.columns):
             max_len = max(dfp.data[col].apply(lambda x: len(str(x))).max(), len(col))

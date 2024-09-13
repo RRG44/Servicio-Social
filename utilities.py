@@ -127,36 +127,39 @@ def convert_types(df):
     return df
 
 def highlight(row):
-    theres_blank, styles = blank_row(row)
-
-    if theres_blank:
-        return styles
-
-    # Initialize styles list with empty strings for each column
     styles = [''] * len(row.index)
 
-    for col in row.index:
+    blank_siia = True if (pd.isna(row.get('CVE PROFESOR_siia')) or row.get('CVE PROFESOR_siia')==0) and (pd.isna(row.get('MATERIA_siia')) or row.get('MATERIA_siia')=='') else False
+    blank_ch = True if (pd.isna(row.get('CVE PROFESOR_ch')) or row.get('CVE PROFESOR_ch')==0) and (pd.isna(row.get('MATERIA_ch')) or row.get('MATERIA_ch')=='') else False
 
-        if (('_ch' in col) or ('_siia' in col)):
-            col_base = col.replace('_ch', '') if '_ch' in col else col.replace('_siia', '')
-            val_ch = row.get(f'{col_base}_ch')
-            val_siia = row.get(f'{col_base}_siia')
+    if blank_siia:
+        styles = ['background-color: orange'] * len(row.index)
+    elif blank_ch:
+        styles = ['background-color: yellow'] * len(row.index)
+    else:
+        for col in row.index:
+            if (('_ch' in col) or ('_siia' in col)):
+                col_base = col.replace('_ch', '') if '_ch' in col else col.replace('_siia', '')
+                val_ch = row.get(f'{col_base}_ch')
+                val_siia = row.get(f'{col_base}_siia')
 
-            if pd.isna(val_siia) and pd.isna(val_ch):
-                styles[row.index.get_loc(col)] = ''  # No highlight, both are NaN
-            elif (pd.isna(val_siia) and not pd.isna(val_ch)) or (not pd.isna(val_siia) and pd.isna(val_ch)):
-                styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if one is NaN and the other is not
-            elif val_siia != val_ch:
-                styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if different
+                if pd.isna(val_siia) and pd.isna(val_ch):
+                    styles[row.index.get_loc(col)] = ''  # No highlight, both are NaN
+                elif (pd.isna(val_siia) and not pd.isna(val_ch)) or (not pd.isna(val_siia) and pd.isna(val_ch)):
+                    styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if one is NaN and the other is not
+                elif val_siia != val_ch:
+                    styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if different
+                else:
+                    styles[row.index.get_loc(col)] = ''  # No highlight if they are the same
             else:
-                styles[row.index.get_loc(col)] = ''  # No highlight if they are the same
-        else:
-            styles[row.index.get_loc(col)] = ''
+                styles[row.index.get_loc(col)] = ''
 
     # Highlight purple if SA, SA.1, SA.2, SA.3, SA.4 contains at least "VIR"
     for sa_col in ['SA_siia', 'SA.1_siia', 'SA.2_siia', 'SA.3_siia', 'SA.4_siia' ]:
         if 'VIR' in str(row.get(sa_col, '')):
             styles[row.index.get_loc(sa_col)] = 'background-color: #C790F1'
+    
+    styles[row.index.get_loc('div')] = 'background-color: black'
 
     return styles
 
@@ -168,23 +171,6 @@ def highlight_differences(siia, ch):
 
 def insert_na(data):
     return data.replace(to_replace=[0, ''], value=pd.NA)
-
-def blank_row(row):
-    styles = []
-    blank_siia = True if (pd.isna(row.get('CVE PROFESOR_siia')) or row.get('CVE PROFESOR_siia')==0) and (pd.isna(row.get('MATERIA_siia')) or row.get('MATERIA_siia')=='') else False
-    blank_ch = True if (pd.isna(row.get('CVE PROFESOR_ch')) or row.get('CVE PROFESOR_ch')==0) and (pd.isna(row.get('MATERIA_ch')) or row.get('MATERIA_ch')=='') else False
-    there_are = True if blank_siia or blank_ch else False
-    
-    if not there_are:
-        return there_are, styles
-
-    for _ in row.index:
-        if blank_siia:
-            styles.append('background-color: orange')
-        if blank_ch:
-            styles.append('background-color: yellow')
-
-    return there_are, styles
 
 #Verify that the excel that is entered follows the desired format
 def validate_siia(file_path):
