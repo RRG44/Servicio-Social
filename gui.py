@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-import subprocess
 import os
 import threading
+import main
 
 def run_script():
     file1 = file1_entry.get()
@@ -28,11 +28,11 @@ def run_script():
 def execute_script(file1, file2, output_folder):
     try:
         # Run your script and capture the output
-        result = subprocess.run(["python", "main.py", file1, file2, output_folder], capture_output=True, text=True)
-        if result.returncode == 0:
+        result = main.run_script(file1, file2, output_folder)
+        if result['success']:
             messagebox.showinfo("Success", "Script executed successfully!")
         else:
-            messagebox.showerror("Error", f"Script failed with return code {result.returncode}: {result.stderr}")
+            messagebox.showerror("Error", f"Script failed: {result['success']}")
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
     finally:
