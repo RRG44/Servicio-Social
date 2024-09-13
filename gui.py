@@ -68,20 +68,20 @@ style.configure("TLabel", font=("Helvetica", 12))
 style.configure("TEntry", font=("Helvetica", 12), padding=5)
 
 # Create labels and entry fields for file selection
-ttk.Label(root, text="File 1:").grid(row=0, column=0, padx=10, pady=10, sticky=tk.E)
+ttk.Label(root, text="SIIA:").grid(row=0, column=0, padx=10, pady=10, sticky=tk.E)
 file1_entry = ttk.Entry(root, width=50)
 file1_entry.grid(row=0, column=1, padx=10, pady=10)
-ttk.Button(root, text="Browse...", command=select_file1).grid(row=0, column=2, padx=10, pady=10)
+ttk.Button(root, text="Buscar...", command=select_file1).grid(row=0, column=2, padx=10, pady=10)
 
-ttk.Label(root, text="File 2:").grid(row=1, column=0, padx=10, pady=10, sticky=tk.E)
+ttk.Label(root, text="CH:").grid(row=1, column=0, padx=10, pady=10, sticky=tk.E)
 file2_entry = ttk.Entry(root, width=50)
 file2_entry.grid(row=1, column=1, padx=10, pady=10)
-ttk.Button(root, text="Browse...", command=select_file2).grid(row=1, column=2, padx=10, pady=10)
+ttk.Button(root, text="Buscar...", command=select_file2).grid(row=1, column=2, padx=10, pady=10)
 
-ttk.Label(root, text="Output Folder:").grid(row=2, column=0, padx=10, pady=10, sticky=tk.E)
+ttk.Label(root, text="Folder de Guardado:").grid(row=2, column=0, padx=10, pady=10, sticky=tk.E)
 output_entry = ttk.Entry(root, width=50)
 output_entry.grid(row=2, column=1, padx=10, pady=10)
-ttk.Button(root, text="Browse...", command=select_output_folder).grid(row=2, column=2, padx=10, pady=10)
+ttk.Button(root, text="Buscar...", command=select_output_folder).grid(row=2, column=2, padx=10, pady=10)
 
 # Create the progress bar (hidden by default)
 progress_bar = ttk.Progressbar(root, mode='indeterminate', length=400)
@@ -89,7 +89,7 @@ progress_bar.grid(row=3, column=1, padx=10, pady=20)
 progress_bar.grid_remove()  # Hide the progress bar initially
 
 # Run script button
-run_button = ttk.Button(root, text="Run Script", command=run_script)
+run_button = ttk.Button(root, text="Comparar", command=run_script)
 run_button.grid(row=4, column=1, padx=10, pady=20)
 
 # Start the GUI event loop
