@@ -20,7 +20,7 @@ def run_script():
     # Start the progress bar and disable the Run button
     progress_bar.grid(row=3, column=1, padx=10, pady=20)
     progress_bar.start()
-    run_button.config(state=tk.DISABLED)
+    output_button.config(state=tk.DISABLED)
 
     # Run the script in a separate thread to avoid freezing the UI
     threading.Thread(target=execute_script, args=(file1, file2, output_folder)).start()
