@@ -31,7 +31,8 @@ def execute_script(file1, file2, output_folder):
         result = main.run_script(file1, file2, output_folder)
         if result['success']:
             messagebox.showinfo("Success", "Script executed successfully!")
-        else:            messagebox.showerror("Error", f"Script failed: {result['success']}")
+        else:            
+            messagebox.showerror("Error", f"Script failed: {result['success']}\n{result['error']}")
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
     finally:
@@ -62,8 +63,8 @@ root.configure(bg='white', padx=10, pady=10)
 
 # Apply modern style using ttk
 style = ttk.Style()
-style.configure("TButton", font=("Helvetica", 12))
-style.configure("TLabel", font=("Helvetica", 12))
+style.configure("TButton", font=("Helvetica", 12), background="white")
+style.configure("TLabel", font=("Helvetica", 12), background="white")
 style.configure("TEntry", font=("Helvetica", 12), padding=5)
 
 # Create labels and entry fields for file selection
@@ -83,7 +84,7 @@ output_entry.grid(row=2, column=1, padx=10, pady=10)
 ttk.Button(root, text="Seleccionar", command=select_output_folder).grid(row=2, column=2, padx=10, pady=10)
 
 # Create the progress bar (hidden by default)
-progress_bar = ttk.Progressbar(root, mode='indeterminate', length=100)
+progress_bar = ttk.Progressbar(root, mode='indeterminate', length=300)
 progress_bar.grid(row=3, column=1, padx=10, pady=20)
 progress_bar.grid_remove()  # Hide the progress bar initially
 
