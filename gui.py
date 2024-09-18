@@ -31,8 +31,7 @@ def execute_script(file1, file2, output_folder):
         result = main.run_script(file1, file2, output_folder)
         if result['success']:
             messagebox.showinfo("Success", "Script executed successfully!")
-        else:
-            messagebox.showerror("Error", f"Script failed: {result['success']}")
+        else:            messagebox.showerror("Error", f"Script failed: {result['success']}")
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
     finally:
@@ -58,8 +57,8 @@ def select_output_folder():
 
 # Create the main window
 root = tk.Tk()
-root.title("Modern Script Runner")
-root.geometry("600x300")
+root.title("Comparación SIIA-CH")
+root.configure(bg='white', padx=10, pady=10)
 
 # Apply modern style using ttk
 style = ttk.Style()
@@ -68,17 +67,17 @@ style.configure("TLabel", font=("Helvetica", 12))
 style.configure("TEntry", font=("Helvetica", 12), padding=5)
 
 # Create labels and entry fields for file selection
-ttk.Label(root, text="SIIA:").grid(row=0, column=0, padx=10, pady=10, sticky=tk.E)
+ttk.Label(root, text="Archivo SIIA:").grid(row=0, column=0, padx=15, pady=10, sticky=tk.E)
 file1_entry = ttk.Entry(root, width=50)
 file1_entry.grid(row=0, column=1, padx=10, pady=10)
 ttk.Button(root, text="Buscar...", command=select_file1).grid(row=0, column=2, padx=10, pady=10)
 
-ttk.Label(root, text="CH:").grid(row=1, column=0, padx=10, pady=10, sticky=tk.E)
+ttk.Label(root, text="Archivo CH:").grid(row=1, column=0, padx=15, pady=10, sticky=tk.E)
 file2_entry = ttk.Entry(root, width=50)
 file2_entry.grid(row=1, column=1, padx=10, pady=10)
 ttk.Button(root, text="Buscar...", command=select_file2).grid(row=1, column=2, padx=10, pady=10)
 
-ttk.Label(root, text="Folder de Guardado:").grid(row=2, column=0, padx=10, pady=10, sticky=tk.E)
+ttk.Label(root, text="Folder de\nGuardado:").grid(row=2, column=0, padx=15, pady=10, sticky=tk.E)
 output_entry = ttk.Entry(root, width=50)
 output_entry.grid(row=2, column=1, padx=10, pady=10)
 ttk.Button(root, text="Buscar...", command=select_output_folder).grid(row=2, column=2, padx=10, pady=10)
