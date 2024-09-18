@@ -1,17 +1,12 @@
 import pandas as pd
-import numpy as np
 import utilities as util
 import sys
 import os
 
-#! COMMAND: python main.py "carga siia 232.xlsx" "CH 2023-2.xlsx" "userPath FOLDER here"
+#! COMMAND: python main.py "file1" "file2" "outputPath"
 
-def main():
+def run_script(siiaPath, chPath, userPath=""):
     try:
-        siiaPath = sys.argv[1]
-        chPath = sys.argv[2]
-        userPath = sys.argv[3] if len(sys.argv) == 4 else "" 
-
         # file reading
         siia = util.read_siia(siiaPath)
         ch = util.read_ch(chPath)
@@ -39,12 +34,29 @@ def main():
             max_len = max(dfp.data[col].apply(lambda x: len(str(x))).max(), len(col))
             worksheet.set_column(i, i, max_len + 1)
 
-        writer.close()    
+        writer.close()
+        
+        return {"success": True}  # Return a success flag if the script completes without errors
+    except Exception as e:
+        return {"success": False, "error": str(e)}  # Return error details for use in the GUI
 
-        sys.exit(0)
+def main():
+    try:
+        siiaPath = sys.argv[1]
+        chPath = sys.argv[2]
+        userPath = sys.argv[3] if len(sys.argv) == 4 else "" 
+
+        result = run_script(siiaPath, chPath, userPath)
+        
+        if result["success"]:
+            print("Script executed successfully.")
+            sys.exit(0)
+        else:
+            print(f"Error: {result['error']}", file=sys.stderr)
+            sys.exit(1)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
