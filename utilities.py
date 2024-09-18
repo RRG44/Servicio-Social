@@ -133,9 +133,9 @@ def highlight(row):
     blank_ch = True if (pd.isna(row.get('CVE PROFESOR_ch')) or row.get('CVE PROFESOR_ch')==0) and (pd.isna(row.get('MATERIA_ch')) or row.get('MATERIA_ch')=='') else False
 
     if blank_siia:
-        styles = ['background-color: orange'] * len(row.index)
+        styles = ['background-color: #41ead4'] * len(row.index)
     elif blank_ch:
-        styles = ['background-color: yellow'] * len(row.index)
+        styles = ['background-color: #fbff12'] * len(row.index)
     else:
         for col in row.index:
             if (('_ch' in col) or ('_siia' in col)):
@@ -146,9 +146,9 @@ def highlight(row):
                 if pd.isna(val_siia) and pd.isna(val_ch):
                     styles[row.index.get_loc(col)] = ''  # No highlight, both are NaN
                 elif (pd.isna(val_siia) and not pd.isna(val_ch)) or (not pd.isna(val_siia) and pd.isna(val_ch)):
-                    styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if one is NaN and the other is not
+                    styles[row.index.get_loc(col)] = 'background-color: #ff206e'  # Highlight if one is NaN and the other is not
                 elif val_siia != val_ch:
-                    styles[row.index.get_loc(col)] = 'background-color: red'  # Highlight if different
+                    styles[row.index.get_loc(col)] = 'background-color: #ff206e'  # Highlight if different
                 else:
                     styles[row.index.get_loc(col)] = ''  # No highlight if they are the same
             else:
@@ -157,9 +157,9 @@ def highlight(row):
     # Highlight purple if SA, SA.1, SA.2, SA.3, SA.4 contains at least "VIR"
     for sa_col in ['SA_siia', 'SA.1_siia', 'SA.2_siia', 'SA.3_siia', 'SA.4_siia' ]:
         if 'VIR' in str(row.get(sa_col, '')):
-            styles[row.index.get_loc(sa_col)] = 'background-color: #C790F1'
+            styles[row.index.get_loc(sa_col)] = 'background-color: #00815b'
     
-    styles[row.index.get_loc('div')] = 'background-color: black'
+    styles[row.index.get_loc('div')] = 'background-color: #0c0f0a'
 
     return styles
 
