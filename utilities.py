@@ -70,26 +70,22 @@ def read_ch(path):
     required_columns = ['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
                         'LU', 'LU.1', 'SA', 'MA', 'MA.1', 'SA.1', 'MI', 'MI.1', 'SA.2', 'JU',
                         'JU.1', 'SA.3', 'VI', 'VI.1', 'SA.4']
-    try:
-        ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
 
-        # if missing columns do not execute
-        missing_columns = [col for col in required_columns if col not in ch.columns]
-        if missing_columns:
-            raise KeyError(f"Columnas faltantes: {', '.join(missing_columns)}")
+    ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
+
+    # if missing columns do not execute
+    missing_columns = [col for col in required_columns if col not in ch.columns]
+    if missing_columns:
+        raise KeyError(f"Columnas faltantes en CH: {', '.join(missing_columns)}")
         
-        # Apply accent and punctuation removal
-        ch['PROFESOR'] = ch['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
-        ch['MATERIA'] = ch['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
+    # Apply accent and punctuation removal
+    ch['PROFESOR'] = ch['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
+    ch['MATERIA'] = ch['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
 
-        # Replace special characters
-        ch['PROFESOR'] = ch['PROFESOR'].str.replace(r'—', 'N', regex=True)
-        ch['MATERIA'] = ch['MATERIA'].str.replace("—", "N", case=False, regex=True)
-        return convert_types(ch)
-    except KeyError as e:
-        print(f"Error: El formato del archivo Excel es inválido. {e}", file=sys.stderr)
-    except Exception as e:
-        print(f"Error: No se pudo procesar el archivo Excel. {e}", file=sys.stderr)
+    # Replace special characters
+    ch['PROFESOR'] = ch['PROFESOR'].str.replace(r'—', 'N', regex=True)
+    ch['MATERIA'] = ch['MATERIA'].str.replace("—", "N", case=False, regex=True)
+    return convert_types(ch)
     
 def change_col_order(df):
     df = df[['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
@@ -179,39 +175,22 @@ def validate_siia(file_path):
         'AREA': 'PE', 'MAESTRO': 'CVE PROFESOR', 'NOMBRE': 'PROFESOR'
     }
 
-    expected_columns = [
-        'PERIODO', 'ADSCRIP', 'AREA', 'MATERIA', 'SEMESTRE', 'GRUPO',
-        'LABORATORI', 'MAESTRO', 'HORAS', 'TIPOHOR', 'NOMBRE', 'CVECARPRED',
-        'PUESTO', 'NOMBREMATE', 'FORMPAG', 'FECINIP', 'TIPOHORA', 'LUNES',
-        'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'CARRERA',
-        'EDIFICIO', 'AULA', 'ADSCRIPCIO', 'CUPO', 'SUPLENTE', 'MOTIVO',
-        'FECHASSUPL', 'FECHCAPTUR', 'CAPTURO', 'CARGA', 'EDIFLUNES',
-        'AULALUNES', 'EDIFMARTES', 'AULAMARTES', 'EDIFMIERCO', 'AULAMIERCO',
-        'EDIFJUEVES', 'AULAJUEVES', 'EDIFVIERNE', 'AULAVIERNE', 'EDIFSABADO',
-        'AULASABADO'
+    # Required columns
+    required_columns = [
+        "AREA", "MATERIA", "SEMESTRE", "GRUPO", "MAESTRO", "NOMBRE", 
+        "NOMBREMATE", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", 
+        "AULALUNES", "AULAMARTES", "AULAMIERCO", "AULAJUEVES", "AULAVIERNE", "AULA"
     ]
     
-    try:
-        # Load the Excel
-        data = pd.read_excel(file_path)
+    # Load the Excel
+    data = pd.read_excel(file_path)
         
-        # Verify that all expected columns are present
-        missing_columns = [col for col in expected_columns if col not in data.columns]
-        if missing_columns:
-            raise KeyError(f"Columnas faltantes: {', '.join(missing_columns)}")
+    # Verify that all expected columns are present
+    missing_columns = [col for col in required_columns if col not in data.columns]
+    if missing_columns:
+        raise KeyError(f"Columnas faltantes en SIIA: {', '.join(missing_columns)}")
         
-        # Required columns
-        required_columns = [
-            "AREA", "MATERIA", "SEMESTRE", "GRUPO", "MAESTRO", "NOMBRE", 
-            "NOMBREMATE", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", 
-            "AULALUNES", "AULAMARTES", "AULAMIERCO", "AULAJUEVES", "AULAVIERNE", "AULA"
-        ]
-        
-        # Keep only the required columns and rename them
-        siia = data[required_columns].rename(columns=columns_mapping)
+    # Keep only the required columns and rename them
+    siia = data[required_columns].rename(columns=columns_mapping)
 
-        return siia
-    except KeyError as e:
-        print(f"Error: El formato del archivo Excel es inválido. {e}", file=sys.stderr)
-    except Exception as e:
-        print(f"Error: No se pudo procesar el archivo Excel. {e}", file=sys.stderr)
+    return siia
