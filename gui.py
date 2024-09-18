@@ -56,6 +56,13 @@ def select_output_folder():
     output_entry.delete(0, tk.END)
     output_entry.insert(0, folder_path)
 
+# hoover
+def on_enter(e):
+    output_button['background'] = '#1070c9'
+
+def on_leave(e):
+    output_button['background'] = '#05549D'
+
 # Create the main window
 root = tk.Tk()
 root.title("Comparación SIIA-CH")
@@ -88,9 +95,10 @@ progress_bar = ttk.Progressbar(root, mode='indeterminate', length=300)
 progress_bar.grid(row=3, column=1, padx=10, pady=20)
 progress_bar.grid_remove()  # Hide the progress bar initially
 
-# Run script button
-run_button = ttk.Button(root, text="Comparar", command=run_script)
-run_button.grid(row=4, column=1, padx=10, pady=20)
+output_button = tk.Button(root, text="Comparar",font=("Helvetica", 12, 'bold'), border=0, command=run_script, bg="#05549D", fg="white")
+output_button.grid(row=4, column=1, padx=10, pady=20)
+output_button.bind("<Enter>", on_enter)
+output_button.bind("<Leave>", on_leave)
 
 # Start the GUI event loop
 root.mainloop()
