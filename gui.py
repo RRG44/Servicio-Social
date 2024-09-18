@@ -39,7 +39,7 @@ def execute_script(file1, file2, output_folder):
         # Stop the progress bar, hide it, and re-enable the Run button
         progress_bar.stop()
         progress_bar.grid_remove()
-        run_button.config(state=tk.NORMAL)
+        output_button.config(state=tk.NORMAL)
 
 def select_file1():
     file_path = filedialog.askopenfilename()
