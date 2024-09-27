@@ -7,14 +7,16 @@
     2.2. Change to that folder and then execute: `D:\vEnv> python -m venv vEnv`
     
     2.3. Search for the Script folder and execute the command based on your OS: `D:\vEnv\vEnv\Scripts> activate.bat`
-    | Platform | Shell | Command to activate virtual environment |
-    | -------- | ----- | --------------------------------------- |
-    | POSIX | bash/zsh | $ source <venv>/bin/activate |
-    | POSIX | fish | $ source <venv>/bin/activate.fish |
-    | POSIX | csh/tcsh | $ source <venv>/bin/activate.csh |
-    | POSIX | PowerShell | $ <venv>/bin/Activate.ps1 |
-    | Windows | cmd.exe | C:\> <venv>\Scripts\activate.bat |
-    | Windows | PowerShell | PS C:\> <venv>\Scripts\Activate.ps1 |
+    | Shell | Command to activate virtual environment |
+    | ----- | --------------------------------------- |
+    | POSIX |
+    | bash/zsh | $ source <venv>/bin/activate |
+    | fish | $ source <venv>/bin/activate.fish |
+    | csh/tcsh | $ source <venv>/bin/activate.csh |
+    | PowerShell | $ <venv>/bin/Activate.ps1 |
+    | Windows |
+    | cmd.exe | C:\> <venv>\Scripts\activate.bat |
+    | PowerShell | PS C:\> <venv>\Scripts\Activate.ps1 |
 
     Now your venv is active! **Don't close the CLI**
 
