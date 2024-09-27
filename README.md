@@ -9,12 +9,12 @@
     2.3. Search for the Script folder and execute the command based on your OS: `D:\vEnv\vEnv\Scripts> activate.bat`
     | Shell | Command to activate virtual environment |
     | ----- | --------------------------------------- |
-    | POSIX |
+    | POSIX || |
     | bash/zsh | $ source <venv>/bin/activate |
     | fish | $ source <venv>/bin/activate.fish |
     | csh/tcsh | $ source <venv>/bin/activate.csh |
     | PowerShell | $ <venv>/bin/Activate.ps1 |
-    | Windows |
+    | Windows || |
     | cmd.exe | C:\> <venv>\Scripts\activate.bat |
     | PowerShell | PS C:\> <venv>\Scripts\Activate.ps1 |
 
