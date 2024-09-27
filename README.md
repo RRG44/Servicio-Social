@@ -11,5 +11,5 @@
     Now your venv is active! **Don't close the CLI**
 
 3. Clone this repo in another folder
-4. On the same instance of the CLI open the folder repo and execute: `D:\Servicio-Social> `
-5. 
+4. On the same instance of the CLI open the folder repo and execute: `D:\Servicio-Social> python -m pip install requirements.txt`
+5. Finally execute the next command replacing \<this\>
