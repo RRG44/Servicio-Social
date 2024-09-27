@@ -6,7 +6,7 @@
     
     2.2. Change to that folder and then execute: `D:\vEnv> python -m venv vEnv`
     
-    2.3. Search for the Script folder and execute the command based on your OS: `D:\vEnv\vEnv\Scripts> activate.bat`
+    2.3. Search for the folder and execute the command based on your OS. Example: `D:\vEnv\vEnv\Scripts> activate.bat`
     | Platform | Shell | Command to activate virtual environment |
     | -------- | ----- | --------------------------------------- |
     | POSIX | bash/zsh | $ source <venv>/bin/activate |
