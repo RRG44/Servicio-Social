@@ -21,5 +21,7 @@
 3. Clone this repo in another folder
 4. On the same instance of the CLI open the folder repo and execute: `D:\Servicio-Social> python -m pip install requirements.txt`
 5. Finally execute the command replacing \<this\>:
-    For CLI only: `pyinstaller --onefile --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon <icon for your app, must be .ico> main.py`
-    For GUI: `pyinstaller --onefile --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon <icon for your app, must be .ico> main.py`
+    
+    For CLI only: `pyinstaller --onefile --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico main.py`
+    
+    For GUI: `pyinstaller --onefile --windowed --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico gui.py`
