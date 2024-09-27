@@ -2,6 +2,8 @@ import pandas as pd
 import unicodedata
 import sys
 
+# * FORMATTING FUNCTIONS
+
 def separate_hours(hours):
     """Transform string hh:mm-hh:mm to float."""
     try: 
@@ -18,74 +20,6 @@ def remove_accents(input_str):
     if isinstance(input_str, str):
         return ''.join(c for c in unicodedata.normalize('NFKD', input_str) if not unicodedata.combining(c))
     return input_str
-
-def read_siia(path):
-    """Import and process SIIA Excel data."""
-    
-    siia = validate_siia(path)
-
-    siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')
-    # Apply accent and punctuation removal
-    siia['PROFESOR'] = siia['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
-    siia['MATERIA'] = siia['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
-
-    # Replace special characters
-    siia['PROFESOR'] = siia['PROFESOR'].str.replace('Ð', 'N', regex=True)
-    siia['MATERIA'] = siia['MATERIA'].str.replace('Ð', 'N', case=False, regex=True)
-    
-    # Adjust GRUPO column
-    siia['GRUPO'] = siia['GRUPO'] % 100
-
-    # Process days of the week
-    dias = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES']
-    for d in dias:
-        siia[[d[:2], d[:2]+'.1']] = siia[d].apply(separate_hours).apply(pd.Series)
-    siia.drop(labels=dias, axis=1, inplace=True)
-
-    # Process AULA data
-    for i, d in enumerate(dias):
-        sa_column = 'SA' if i == 0 else f'SA.{i}'
-        siia[sa_column] = siia['AULA'].where(siia[d[:2]]>0.0, "")
-    siia.drop(labels=['AULA'], axis=1, inplace=True)
-
-    # Check and process different SA values
-    dias_aula = ['LUNES', 'MARTES', 'MIERCO', 'JUEVES', 'VIERNE']
-    for i, d in enumerate(dias_aula):
-        sa_column = 'SA' if i == 0 else f'SA.{i}'
-        aula_column = f'AULA{d}'
-        siia[sa_column] = siia[aula_column].where((pd.notna(siia[aula_column])) & (siia[aula_column] != ''), siia[sa_column])
-        siia.drop(labels=[aula_column], axis=1, inplace=True)
-
-    # Convert data types and aggregate
-    siia = siia.convert_dtypes().fillna("")  # Fill NaNs in string columns with an empty string
-    siia = siia.fillna(0)  # Ensure numeric columns have 0 instead of NaN
-    aggregated = siia.groupby(['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR'], as_index=False).agg(
-        {col: 'max' for col in siia.columns if col not in ['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR']}
-    )
-    
-    return convert_types(aggregated)
-
-def read_ch(path):
-    """Import and process CH Excel data with specified dtypes."""
-    required_columns = ['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
-                        'LU', 'LU.1', 'SA', 'MA', 'MA.1', 'SA.1', 'MI', 'MI.1', 'SA.2', 'JU',
-                        'JU.1', 'SA.3', 'VI', 'VI.1', 'SA.4']
-
-    ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
-
-    # if missing columns do not execute
-    missing_columns = [col for col in required_columns if col not in ch.columns]
-    if missing_columns:
-        raise KeyError(f"Columnas faltantes en CH: {', '.join(missing_columns)}")
-        
-    # Apply accent and punctuation removal
-    ch['PROFESOR'] = ch['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
-    ch['MATERIA'] = ch['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
-
-    # Replace special characters
-    ch['PROFESOR'] = ch['PROFESOR'].str.replace(r'—', 'N', regex=True)
-    ch['MATERIA'] = ch['MATERIA'].str.replace("—", "N", case=False, regex=True)
-    return convert_types(ch)
     
 def change_col_order(df):
     df = df[['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
@@ -168,6 +102,67 @@ def highlight_differences(siia, ch):
 def insert_na(data):
     return data.replace(to_replace=[0, ''], value=pd.NA)
 
+# * SIIA FUNCTIONS
+
+def read_siia(path):
+    """
+    Imports the SIIA file, process its data and formats it as CH.
+    
+    Args:
+        path (string) : the Excel SIIA path file
+
+    Returns:
+        pandas.DataFrame : contains processed data and formatted as CH
+
+    Example:
+        >>> df = read_siia(path)
+    """
+    
+    siia = validate_siia(path)
+
+    siia['CVE PROFESOR'] = siia['CVE PROFESOR'].astype('Int64')
+    # Remove accent and punctuation
+    siia['PROFESOR'] = siia['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
+    siia['MATERIA'] = siia['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
+
+    # Replace special character ñ
+    siia['PROFESOR'] = siia['PROFESOR'].str.replace('Ð', 'N', regex=True)
+    siia['MATERIA'] = siia['MATERIA'].str.replace('Ð', 'N', case=False, regex=True)
+    
+    # Deletes decimals in GRUPO
+    siia['GRUPO'] = siia['GRUPO'] % 100
+
+    # Creates LU and LU.1 example: 13:00-15:00 to LU=13 LU.1=15
+    dias = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES']
+    for d in dias:
+        siia[[d[:2], d[:2]+'.1']] = siia[d].apply(separate_hours).apply(pd.Series)
+    siia.drop(labels=dias, axis=1, inplace=True)
+
+    # Creates SA for each day
+    for i, d in enumerate(dias):
+        sa_column = 'SA' if i == 0 else f'SA.{i}'
+        siia[sa_column] = siia['AULA'].where(siia[d[:2]]>0.0, "")
+    siia.drop(labels=['AULA'], axis=1, inplace=True)
+
+    # Checks and replaces SA value if there is an alternative classroom in AULA<day>
+    dias_aula = ['LUNES', 'MARTES', 'MIERCO', 'JUEVES', 'VIERNE']
+    for i, d in enumerate(dias_aula):
+        sa_column = 'SA' if i == 0 else f'SA.{i}'
+        aula_column = f'AULA{d}'
+        siia[sa_column] = siia[aula_column].where((pd.notna(siia[aula_column])) & (siia[aula_column] != ''), siia[sa_column])
+        siia.drop(labels=[aula_column], axis=1, inplace=True)
+
+    # Convert data
+    siia = siia.convert_dtypes().fillna("")  # Fill NaNs in string columns with an empty string
+    siia = siia.fillna(0)  # Ensure numeric columns have 0 instead of NaN
+
+    # merge those classes that have same values of 'GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR'
+    aggregated = siia.groupby(['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR'], as_index=False).agg(
+        {col: 'max' for col in siia.columns if col not in ['GRUPO', 'BLOQUE', 'CVEM', 'PE', 'CVE PROFESOR']}
+    )
+    
+    return convert_types(aggregated)
+
 #Verify that the excel that is entered follows the desired format
 def validate_siia(file_path):
     columns_mapping = {
@@ -194,3 +189,27 @@ def validate_siia(file_path):
     siia = data[required_columns].rename(columns=columns_mapping)
 
     return siia
+
+# * CH FUNCTIONS
+
+def read_ch(path):
+    """Import and process CH Excel data with specified dtypes."""
+    required_columns = ['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
+                        'LU', 'LU.1', 'SA', 'MA', 'MA.1', 'SA.1', 'MI', 'MI.1', 'SA.2', 'JU',
+                        'JU.1', 'SA.3', 'VI', 'VI.1', 'SA.4']
+
+    ch = pd.read_excel(path, skiprows=4).drop(columns=['No'])
+
+    # if missing columns do not execute
+    missing_columns = [col for col in required_columns if col not in ch.columns]
+    if missing_columns:
+        raise KeyError(f"Columnas faltantes en CH: {', '.join(missing_columns)}")
+        
+    # Apply accent and punctuation removal
+    ch['PROFESOR'] = ch['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
+    ch['MATERIA'] = ch['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
+
+    # Replace special characters
+    ch['PROFESOR'] = ch['PROFESOR'].str.replace(r'—', 'N', regex=True)
+    ch['MATERIA'] = ch['MATERIA'].str.replace("—", "N", case=False, regex=True)
+    return convert_types(ch)
