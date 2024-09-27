@@ -115,7 +115,7 @@ def read_siia(path):
         pandas.DataFrame : contains processed data and formatted as CH
 
     Example:
-        >>> df = read_siia(path)
+        >>> df = read_siia('docs/carga siia 232.xlsx')
     """
     
     siia = validate_siia(path)
@@ -163,22 +163,34 @@ def read_siia(path):
     
     return convert_types(aggregated)
 
-#Verify that the excel that is entered follows the desired format
-def validate_siia(file_path):
+def validate_siia(path):
+    """
+    Checks for the existence of columns in SII and renames them as CH columns
+    
+    Args:
+        path (string) : the Excel SIIA path file
+
+    Returns:
+        pandas.DataFrame : with renamed columns
+
+    Raises:
+        KeyError : shows missing columns
+
+    Example:
+        >>> df = validate_siia('docs/carga siia 232.xlsx')
+    """
     columns_mapping = {
         'SEMESTRE': 'BLOQUE', 'MATERIA': 'CVEM', 'NOMBREMATE': 'MATERIA',
         'AREA': 'PE', 'MAESTRO': 'CVE PROFESOR', 'NOMBRE': 'PROFESOR'
     }
 
-    # Required columns
     required_columns = [
         "AREA", "MATERIA", "SEMESTRE", "GRUPO", "MAESTRO", "NOMBRE", 
         "NOMBREMATE", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", 
         "AULALUNES", "AULAMARTES", "AULAMIERCO", "AULAJUEVES", "AULAVIERNE", "AULA"
     ]
     
-    # Load the Excel
-    data = pd.read_excel(file_path)
+    data = pd.read_excel(path)
         
     # Verify that all expected columns are present
     missing_columns = [col for col in required_columns if col not in data.columns]
@@ -205,7 +217,7 @@ def read_ch(path):
     if missing_columns:
         raise KeyError(f"Columnas faltantes en CH: {', '.join(missing_columns)}")
         
-    # Apply accent and punctuation removal
+    # Remove accents and punctuation
     ch['PROFESOR'] = ch['PROFESOR'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
     ch['MATERIA'] = ch['MATERIA'].apply(remove_accents).str.replace(r'[.,]', '', regex=True)
 
