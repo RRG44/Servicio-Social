@@ -25,3 +25,8 @@
     For CLI only: `pyinstaller --onefile --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico main.py`
     
     For GUI: `pyinstaller --onefile --windowed --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico gui.py`
+
+6. Your app is in the `dist` folder
+
+For closing the venv execute `deactivate`.
+You can delete both folders now.
