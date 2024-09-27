@@ -1,4 +1,4 @@
-# Create an Executable for your OS from this Repo!``
+# Create an Executable for your OS from this Repo!
 1. Install python version different from Anaconda. We recommend 3.10. Also download UPX for your OS from [here](https://github.com/upx/upx/releases/tag/v4.2.4) and unzip it 
 2. Using create a Python virtual environment as follows (**don't use Anaconda or any other environment!**):
 
@@ -26,7 +26,8 @@
     
     For GUI: `pyinstaller --onefile --windowed --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico gui.py`
 
-6. Your app is in the `dist` folder
+6. Your app will be in the `dist` folder!
 
 For closing the venv execute `deactivate`.
+
 You can delete both folders now.
