@@ -19,7 +19,7 @@
     Now your venv is active! **Don't close the CLI**
 
 3. Clone this repo in another folder
-4. On the same instance of the CLI open the folder repo and execute: `D:\Servicio-Social> python -m pip install requirements.txt`
+4. On the same instance of the CLI open the folder repo and execute: `D:\Servicio-Social> python -m pip install -r requirements.txt`
 5. Finally execute the command replacing \<this\>:
     
     For CLI only: `pyinstaller --onefile --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico main.py`
