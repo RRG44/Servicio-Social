@@ -5,7 +5,11 @@ import sys
 # * FORMATTING FUNCTIONS
 
 def separate_hours(hours):
-    """Transform string hh:mm-hh:mm to float."""
+    """
+    Transforms string hh:mm-hh:mm to float.
+    Args: string hour formatted as hh:mm-hh:mm
+    Return: int, int
+    """
     try: 
         if hours == '-':
             return 0, 0  # Use 0.0 for numeric operations
@@ -16,7 +20,11 @@ def separate_hours(hours):
         print(f"Error: Formato invalido. Se espera 'hh:mm-hh:mm', se tiene '{hours}'")
 
 def remove_accents(input_str):
-    """Remove accents and punctuation from a string."""
+    """
+    Remove accents and punctuation from a string.
+    Args: string
+    Return: string
+    """
     if isinstance(input_str, str):
         return ''.join(c for c in unicodedata.normalize('NFKD', input_str) if not unicodedata.combining(c))
     return input_str
@@ -28,6 +36,17 @@ def change_col_order(df):
     return df
 
 def convert_types(df):
+    """
+    Cleans the data. Converts non numeric to 0
+    Converts non string to ''
+    
+    Args:
+        pandas.dataFrame
+
+    Returns:
+        pandas.dataFrame
+    """
+
     # Fill NaNs and empty strings with appropriate values
     df = df.fillna({
         'GRUPO': 0, 'BLOQUE': 0, 'CVEM': 0, 'MATERIA': "",
