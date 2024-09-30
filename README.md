@@ -1,12 +1,13 @@
 # Create an Executable for your OS from this Repo!
 1. Install python version different from Anaconda. We recommend 3.10. Also download UPX for your OS from [here](https://github.com/upx/upx/releases/tag/v4.2.4) and unzip it 
-2. Using create a Python virtual environment as follows (**don't use Anaconda or any other environment!**):
+2. Using Python create a virtual environment as follows (**don't use Anaconda or any other environment!**):
 
     2.1. Create a folder in your preferred path. Example : `D:\> mkdir vEnv`
     
     2.2. Change to that folder and then execute: `D:\vEnv> python -m venv vEnv`
     
-    2.3. Search for the folder and execute the command based on your OS. Example: `D:\vEnv\vEnv\Scripts> activate.bat`
+    2.3. Base on your OS search for the folder `Scripts` or `bin` and execute the command based on your OS. Example: `D:\vEnv\vEnv\Scripts> activate.bat`
+
     | Platform | Shell | Command to activate virtual environment |
     | -------- | ----- | --------------------------------------- |
     | POSIX | bash/zsh | $ source <venv>/bin/activate |
@@ -19,15 +20,20 @@
     Now your venv is active! **Don't close the CLI**
 
 3. Clone this repo in another folder
-4. On the same instance of the CLI open the folder repo and execute: `D:\Servicio-Social> python -m pip install -r requirements.txt`
-5. Finally execute the command replacing \<this\>:
-    
-    For CLI only: `pyinstaller --onefile --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico main.py`
-    
-    For GUI: `pyinstaller --onefile --windowed --upx-dir <path to your upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico gui.py`
+4. On the same instance of the CLI open the folder repo and execute: 
 
-6. Your app will be in the `dist` folder!
+    For CLI App: `D:\Servicio-Social> python -m pip install -r requirements.txt`
+    
+    For GUI App: `D:\Servicio-Social> python -m pip install -r requirementsGUI.txt`
+
+5. Finally execute the command replacing \<this parameters\>:
+    
+    For CLI App: `pyinstaller --onefile --upx-dir <path to your unzipped upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico main.py`
+    
+    For GUI App: `pyinstaller --onefile --windowed --upx-dir <path to your unzipped upx.exe> --clean --name <name of the app> --icon assets\iconcd.ico gui.py`
+
+6. Your app will be in the `dist` folder of the repo!
 
 For closing the venv execute `deactivate`.
 
-You can delete both folders now.
+You can delete all the folders creates by pyinstaller and those related to the venv.
