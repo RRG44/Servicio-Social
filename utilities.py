@@ -57,8 +57,21 @@ def convert_types(df):
     return df
 
 def highlight(row):
+    """
+    Highlight different data as pink
+    Data only in ch as blue
+    Data only in siia as yellow
+    VIR classrooms as green
+    
+    Args:
+        pandas.Series
+
+    Returns:
+        pandas.Series
+    """
     styles = [''] * len(row.index)
 
+    # Checks if a row has data in siia but not in ch and vice versa. If there is no CVE PROFESOR and MATERIA there is no class
     blank_siia = True if (pd.isna(row.get('CVE PROFESOR_siia')) or row.get('CVE PROFESOR_siia')==0) and (pd.isna(row.get('MATERIA_siia')) or row.get('MATERIA_siia')=='') else False
     blank_ch = True if (pd.isna(row.get('CVE PROFESOR_ch')) or row.get('CVE PROFESOR_ch')==0) and (pd.isna(row.get('MATERIA_ch')) or row.get('MATERIA_ch')=='') else False
 
@@ -66,7 +79,7 @@ def highlight(row):
         styles = ['background-color: #41ead4'] * len(row.index)
     elif blank_ch:
         styles = ['background-color: #fbff12'] * len(row.index)
-    else:
+    else: # if not blank check for different values in cells
         for col in row.index:
             if (('_ch' in col) or ('_siia' in col)):
                 col_base = col.replace('_ch', '') if '_ch' in col else col.replace('_siia', '')
@@ -80,7 +93,7 @@ def highlight(row):
                 elif val_siia != val_ch:
                     styles[row.index.get_loc(col)] = 'background-color: #ff206e'  # Highlight if different
                 else:
-                    styles[row.index.get_loc(col)] = ''  # No highlight if they are the same
+                    styles[row.index.get_loc(col)] = ''  # No highlight if the same
             else:
                 styles[row.index.get_loc(col)] = ''
 
@@ -89,17 +102,36 @@ def highlight(row):
         if 'VIR' in str(row.get(sa_col, '')):
             styles[row.index.get_loc(sa_col)] = 'background-color: #00815b'
     
+    # Black div column
     styles[row.index.get_loc('div')] = 'background-color: #0c0f0a'
 
     return styles
 
 def highlight_differences(siia, ch):
-    # Merge df on the key columns
+    """
+    Highlights the differences between files
+    
+    Args:
+        pandas.DataFrame
+
+    Returns:
+        pandas.DataFrame : highlighted
+    """
+    # Merges classes based on the same 'GRUPO', 'BLOQUE', 'CVEM' and 'PE' 
     comparison = ch.merge(siia, on=['GRUPO', 'BLOQUE', 'CVEM', 'PE'], suffixes=('_ch', '_siia'), how='outer')
-    df = comparison.style.apply(highlight, axis=1)
+    df = comparison.style.apply(highlight, axis=1) # calls the actual highlight function
     return df
 
 def insert_na(data):
+    """
+    Prepares the data for writing it to an excel
+    
+    Args:
+        pandas.DataFrame
+
+    Returns:
+        pandas.DataFrame : with 0 and '' values as pandas.NA
+    """
     return data.replace(to_replace=[0, ''], value=pd.NA)
 
 # * SIIA FUNCTIONS
@@ -171,7 +203,7 @@ def validate_siia(path):
         path (string) : the Excel SIIA path file
 
     Returns:
-        pandas.DataFrame : with renamed columns
+        pandas.DataFrame : with renamed columns and with 0 for null num values and '' for null strings
 
     Raises:
         KeyError : shows missing columns
@@ -205,7 +237,21 @@ def validate_siia(path):
 # * CH FUNCTIONS
 
 def read_ch(path):
-    """Import and process CH Excel data with specified dtypes."""
+    """
+    Import and process CH Excel data with specified dtypes
+    
+    Args:
+        path (string) : the Excel CH path file
+
+    Returns:
+        pandas.DataFrame : with 0 for null num values and '' for null strings
+
+    Raises:
+        KeyError : shows missing columns
+
+    Example:
+        >>> df = read_ch('docs/carga siia 232.xlsx')
+    """
     required_columns = ['GRUPO', 'BLOQUE', 'CVEM', 'MATERIA', 'PE', 'CVE PROFESOR', 'PROFESOR',
                         'LU', 'LU.1', 'SA', 'MA', 'MA.1', 'SA.1', 'MI', 'MI.1', 'SA.2', 'JU',
                         'JU.1', 'SA.3', 'VI', 'VI.1', 'SA.4']
